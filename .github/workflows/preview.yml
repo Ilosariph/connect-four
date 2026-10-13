@@ -1,0 +1,21 @@
+name: Preview
+
+on:
+  push:
+  delete:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify VPS Manager
+        env:
+          WEBHOOK_URL: ${{ secrets.PREVIEW_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.PREVIEW_WEBHOOK_SECRET }}
+        run: |
+          SIG="sha256=$(openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" "$GITHUB_EVENT_PATH" | awk '{print $NF}')"
+          curl --fail-with-body --silent --show-error --max-time 60 -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-GitHub-Event: ${{ github.event_name }}" \
+            -H "X-Hub-Signature-256: $SIG" \
+            --data-binary "@$GITHUB_EVENT_PATH"

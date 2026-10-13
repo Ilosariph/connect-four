@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Connect Four</title>
+<meta name="description" content="Ad-free Connect Four in the browser: play the computer on three difficulties, a friend on the same device, or online.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<header class="top-bar">
+  <button class="title" id="homeBtn" title="Menu"><h1>Connect <span>Four</span></h1></button>
+  <div class="top-actions">
+    <span class="badge" id="modeBadge" hidden></span>
+    <button class="icon-btn" id="darkToggle" title="Toggle dark mode">&#9790;</button>
+  </div>
+</header>
+
+<main>
+  <!-- ── Menu ── -->
+  <section class="screen menu" id="menu">
+    <p class="tagline">Four in a row wins. Drop wisely.</p>
+    <div class="resume" id="resume"></div>
+
+    <div class="panel">
+      <h2>vs Computer</h2>
+      <div class="seg" id="levelSeg" role="radiogroup" aria-label="Difficulty">
+        <button type="button" data-level="easy" role="radio">Easy</button>
+        <button type="button" data-level="normal" role="radio">Normal</button>
+        <button type="button" data-level="hard" role="radio">Hard</button>
+      </div>
+      <button class="btn-accent wide" id="aiBtn">Play</button>
+      <p class="record" id="record"></p>
+    </div>
+
+    <div class="panel">
+      <h2>vs Player <span class="live"><i></i>online</span></h2>
+      <input id="nameInput" maxlength="16" placeholder="Your name" autocomplete="nickname" aria-label="Your name">
+      <div class="row">
+        <button class="btn-accent" id="createBtn">Create room</button>
+        <button id="quickBtn">Quick match</button>
+      </div>
+      <form class="row" id="joinForm" autocomplete="off">
+        <input id="codeInput" maxlength="4" placeholder="Room code" aria-label="Room code" autocapitalize="characters" spellcheck="false">
+        <button type="submit">Join</button>
+      </form>
+      <p class="err" id="onlineErr" hidden></p>
+    </div>
+
+    <button class="wide" id="localBtn">Two players on this device</button>
+
+    <details class="rules">
+      <summary>How to play</summary>
+      <p>Players take turns dropping a disc into one of the seven columns. The disc falls to the lowest free space.</p>
+      <p>The first to line up four of their discs in a row, horizontally, vertically or diagonally, wins. If the board fills up first, it's a draw.</p>
+      <p>Keyboard: <kbd>←</kbd> <kbd>→</kbd> pick a column, <kbd>Enter</kbd> or <kbd>↓</kbd> drops, <kbd>1</kbd>–<kbd>7</kbd> drop straight into a column.</p>
+    </details>
+  </section>
+
+  <!-- ── Game ── -->
+  <section class="screen game" id="game" hidden>
+    <div class="room-bar" id="roomBar" hidden>
+      <span>Room <b id="roomCode"></b></span>
+      <button class="small" id="copyLink">Copy invite link</button>
+      <span class="opp-status" id="oppStatus"></span>
+    </div>
+
+    <div class="players" id="players">
+      <div class="player" id="p1"><i class="chip red"></i><span></span></div>
+      <span class="vs">vs</span>
+      <div class="player" id="p2"><i class="chip yellow"></i><span></span></div>
+    </div>
+
+    <div class="status" id="status" aria-live="polite"></div>
+
+    <div class="board-wrap">
+      <div class="preview" id="preview" aria-hidden="true"><i class="disc"></i></div>
+      <div class="board" id="board" tabindex="0" role="group" aria-label="Board: arrow keys pick a column, Enter drops">
+        <div class="discs" id="discs"></div>
+        <div class="frame" aria-hidden="true"></div>
+      </div>
+      <div class="col-labels" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+    </div>
+
+    <div class="actions" id="actions"></div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="overModal" hidden>
+  <div class="modal-box">
+    <div class="modal-title" id="overTitle"></div>
+    <div class="modal-sub" id="overSub"></div>
+    <div class="modal-actions">
+      <button class="btn-accent" id="againBtn">Play again</button>
+      <button id="viewBtn">View board</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

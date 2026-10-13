@@ -1,0 +1,12 @@
+{
+  "name": "connect-four",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser Connect Four vs the computer, on one device or online vs a friend",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
